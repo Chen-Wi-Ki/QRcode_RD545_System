@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Rd545Cmd1"
 include(":app")
+
