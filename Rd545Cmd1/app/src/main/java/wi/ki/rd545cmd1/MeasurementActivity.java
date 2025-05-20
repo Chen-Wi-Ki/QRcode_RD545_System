@@ -18,6 +18,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,6 +54,9 @@ public class MeasurementActivity extends AppCompatActivity {
     TNTUserInformation _TNTUserInformation;
     TNTMeasurementInformation _TNTMeasurementInformation;
 
+    final String SERVER_URL = "http://wiciar.com/bmi/testdata";
+    //This test SERVER_URL,You should change your url.
+
     boolean NeedSaveUUID=true;
     private static final String FILE_NAME = "MAC1.txt";
     String MAC1 = "Null";
@@ -53,11 +64,11 @@ public class MeasurementActivity extends AppCompatActivity {
     int _Count;
     UUID _UUID;
 
-    String Birthday;
     int Gender;
-    String Height,ClothesWeight;
+    String Birthday,UserName,Height,ClothesWeight;
     TextView UserText;
-    Button UuidSaveBtn,SaveRomButton,SetDataButton;
+    Button UuidSaveBtn,SaveRomButton,SetDataButton,UpdateCloudButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +86,10 @@ public class MeasurementActivity extends AppCompatActivity {
         SaveRomButton.setVisibility(View.GONE);
         SetDataButton = findViewById(R.id.SetDataButton);
         SetDataButton.setVisibility(View.GONE);
+        UpdateCloudButton = findViewById(R.id.UpdateCloudButton);
+
         Intent intent = getIntent();
+        UserName        = intent.getStringExtra("Phone");
         Birthday        = intent.getStringExtra("Birthday");
         Gender          = intent.getIntExtra("Gender",1);
         Height          = intent.getStringExtra("Height");
@@ -144,8 +158,6 @@ public class MeasurementActivity extends AppCompatActivity {
             @Override
             public void onUserInformationSaved(TNTBLEPeripheral tntblePeripheral, TNTUserInformation tntUserInformation, int deviceStatus, int error) {
                 if (deviceStatus == TNTDeviceStatus.NORMAL) {
-                    // to do something
-                    //UserText.setText("Save User Message Over!!!");
                     UserText.setText("Name:"+tntUserInformation.getNickname()+"\n"+
                             "Gender:"+tntUserInformation.getGender()+"(0=MALE;1=FEMALE)\n"+
                             "Birth:"+tntUserInformation.getDateOfBirth()+"\n"+
@@ -175,9 +187,19 @@ public class MeasurementActivity extends AppCompatActivity {
                 if (deviceStatus == TNTDeviceStatus.NORMAL) {
                     _Count = count;
                     UserText.setText("Measurement Over!!!\n");
-                    _TNTBLEPeripheral.retrieveMeasurementInformation(_Count);
+
+                    if(count<=1)
+                    {
+                        _TNTBLEPeripheral.retrieveMeasurementInformation(_Count);
+                    }
+                    else
+                    {
+                        _Count=_Count-1;
+                        _TNTBLEPeripheral.retrieveMeasurementInformation(_Count);
+                    }
                 }
                 Log.i("wiki1","onMeasurementCountRetrieved runned..._Count="+_Count);
+
             }
 
             @Override
@@ -185,34 +207,114 @@ public class MeasurementActivity extends AppCompatActivity {
                 Log.i("wiki1","onMeasurementInformationRetrieved runned...deviceStatus="+deviceStatus);
                 if (deviceStatus == TNTDeviceStatus.NORMAL) {
                     _TNTMeasurementInformation = tntMeasurementInformation;
-                    UserText.setText("Measurement Message:"+"\n"+
-                            "Weight:"+tntMeasurementInformation.getWeight()+"(kg)\n"+
-                            "BMI:"+tntMeasurementInformation.getBodyMassIndex()+"\n"+
+                    UserText.setText("--Measurement Message--"+"\n"+
+                            "Weight:"+tntMeasurementInformation.getWeight()+":(kg)\n"+
+                            "ActivityLevel:"+tntMeasurementInformation.getActivityLevel()+":(0~3)\n"+
+                            "MuscleQuality:"+tntMeasurementInformation.getMuscleQuality()+":(0~100)\n"+
+                            "AthleteIndex:"+tntMeasurementInformation.getAthleteIndex()+":(50~100)\n"+
+                            "MBA:"+tntMeasurementInformation.getAthleteJudgement()+":(1~4)\n"+
+                            "BasalMetabolicRate:"+tntMeasurementInformation.getBasalMetabolicRate()+":(kcal)\n"+
+                            "GetTheDailyCaloricIntake:"+tntMeasurementInformation.getDailyCaloricIntake()+":(kcal)\n"+
+                            "BasalMetabolicRateJudgement:"+tntMeasurementInformation.getBasalMetabolicRateJudgement()+":(1~16)\n"+
+                            "VisceralFat:"+tntMeasurementInformation.getVisceralFat()+":(1~59)\n"+
+                            "VisceralFatJudgement:"+tntMeasurementInformation.getVisceralFatJudgement()+":(1~3)\n"+
+                            "MetabolicAge:"+tntMeasurementInformation.getMetabolicAge()+":(18~90)\n"+
+                            "BoneMass:"+tntMeasurementInformation.getBoneMass()+":(0.30~7.06)\n"+
+                            "BoneMassJudgement:"+tntMeasurementInformation.getBoneMassJudgement()+":(1~4)\n"+
+                            "BodyWater:"+tntMeasurementInformation.getBodyWater()+":(%)\n"+
+                            "Bmi:"+tntMeasurementInformation.getBodyMassIndex()+":(kg/㎡)\n"+
+                            "BmiJudgement:"+tntMeasurementInformation.getBodyMassIndexJudgement()+":(1~4)\n"+
+                            "EpPulse:"+tntMeasurementInformation.getEpPulse()+":(50-200)\n"+
 
-                            "Body Water:"+tntMeasurementInformation.getBodyWater()+"(%)\n"+
-                            "Body Fat:"+tntMeasurementInformation.getBodyFat()+"(%)\n"+
-                            "Body Fat udgement:"+tntMeasurementInformation.getBodyMassIndexJudgement()+"(1~4)\n"+
-                            "Visceral Fat:"+tntMeasurementInformation.getVisceralFat()+"(1~59)\n"+
-                            "Visceral Fat Judgement:"+tntMeasurementInformation.getVisceralFatJudgement()+"(1~3)\n"+
+                            "BodyFat:"+tntMeasurementInformation.getBodyFat()+":(%)\n"+
+                            "BodyFatJudgement:"+tntMeasurementInformation.getBodyMassIndexJudgement()+":(1~4)\n"+
+                            "MuscleMass:"+tntMeasurementInformation.getMuscleMass()+":(kg)\n"+
+                            "MuscleJudgement:"+tntMeasurementInformation.getMuscleMassJudgement()+":(1~3)\n"+
+                            "MuscleMassScore:"+tntMeasurementInformation.getMuscleMassScore()+":(-4~+4)\n"+
+                            "MuscleQuality:"+tntMeasurementInformation.getMuscleQuality()+":(0~100)\n"+
+                            "MuscleQualityJudgement:"+tntMeasurementInformation.getMuscleQualityJudgement()+":(1~9)\n"+
 
+                            "BodyFat(Trunk):"+tntMeasurementInformation.getBodyFatTrunk()+":(5~75%)\n"+
+                            "BodyFatJudgement(Trunk):"+tntMeasurementInformation.getBodyFatJudgementTrunk()+":(1~5)\n"+
+                            "MuscleMass(Trunk):"+tntMeasurementInformation.getMuscleMassTrunk()+":(kg)\n"+
+                            "MuscleMassJudgement(Trunk):"+tntMeasurementInformation.getMuscleMassJudgementTrunk()+":(1~3)\n"+
+                            "MuscleMassScore(Trunk):"+tntMeasurementInformation.getMuscleMassScoreTrunk()+":(-4~4)\n"+
 
-                            "Bone Mass:"+tntMeasurementInformation.getBoneMass()+"(0.30 - 7.06 )\n"+
-                            "Bone Mass Judgement:"+tntMeasurementInformation.getBoneMassJudgement()+"(1~4)\n"+
+                            "BodyFat(LeftArm):"+tntMeasurementInformation.getBodyFatLeftArm()+":(5~75%)\n"+
+                            "BodyFatJudgement(LeftArm):"+tntMeasurementInformation.getBodyFatJudgementLeftArm()+":(1~5)\n"+
+                            "MuscleMass(LeftArm):"+tntMeasurementInformation.getMuscleMassLeftArm()+":(kg)\n"+
+                            "MuscleMassJudgement (LeftArm):"+tntMeasurementInformation.getMuscleMassJudgementLeftArm()+":(1~3)\n"+
+                            "MuscleMassScore(LeftArm):"+tntMeasurementInformation.getMuscleMassScoreLeftArm()+":(-4~4)\n"+
+                            "MuscleQuality(LeftArm):"+tntMeasurementInformation.getMuscleQualityLeftArm()+":(0~100)\n"+
+                            "MuscleQualityJudgement (LeftArm):"+tntMeasurementInformation.getMuscleQualityJudgementLeftArm()+":(1~9)\n"+
 
+                            "BodyFat(RightArm):"+tntMeasurementInformation.getBodyFatRightArm()+":(5~75%)\n"+
+                            "BodyFatJudgement(RightArm):"+tntMeasurementInformation.getBodyFatJudgementRightArm()+":(1~5)\n"+
+                            "MuscleMass(RightArm):"+tntMeasurementInformation.getMuscleMassRightArm()+":(kg)\n"+
+                            "MuscleMassJudgement(RightArm):"+tntMeasurementInformation.getMuscleMassJudgementRightArm()+":(1~3)\n"+
+                            "MuscleMassScore(RightArm):"+tntMeasurementInformation.getMuscleMassScoreRightArm()+":(-4~4)\n"+
+                            "MuscleQuality(RightArm):"+tntMeasurementInformation.getMuscleQualityRightArm()+":(0~100)\n"+
+                            "MuscleQualityJudgement(RightArm):"+tntMeasurementInformation.getMuscleQualityJudgementRightArm()+":(1~9)\n"+
 
-                            "Muscle Mass:"+tntMeasurementInformation.getMuscleMass()+"(kg)\n"+
-                            "Muscle Mass Score:"+tntMeasurementInformation.getMuscleMassScore()+"(-4~+4)\n"+
-                            "Muscle Judgement:"+tntMeasurementInformation.getMuscleMassJudgement()+"(1~3)\n"+
-                            "Muscle Quality:"+tntMeasurementInformation.getMuscleQuality()+"(0~100)\n"+
+                            "BodyFat(LeftFoot):"+tntMeasurementInformation.getBodyFatLeftFoot()+":(5~75%)\n"+
+                            "BodyFatJudgement(LeftFoot):"+tntMeasurementInformation.getBodyFatJudgementLeftFoot()+":(1~5)\n"+
+                            "MuscleMass(LeftFoot):"+tntMeasurementInformation.getMuscleMassLeftFoot()+":(kg)\n"+
+                            "MuscleMassJudgement(LeftFoot):"+tntMeasurementInformation.getMuscleMassJudgementLeftFoot()+":(1~3)\n"+
+                            "MuscleMassScore(LeftFoot):"+tntMeasurementInformation.getMuscleMassScoreLeftFoot()+":(-4~4)\n"+
+                            "MuscleQuality(LeftFoot):"+tntMeasurementInformation.getMuscleQualityLeftFoot()+":(0~100)\n"+
+                            "MuscleQualityJudgement(LeftFoot):"+tntMeasurementInformation.getMuscleQualityJudgementLeftFoot()+":(1~9)\n"+
 
+                            "BodyFat(RightFoot):"+tntMeasurementInformation.getBodyFatRightFoot()+":(5~75%)\n"+
+                            "BodyFatJudgement(RightFoot):"+tntMeasurementInformation.getBodyFatJudgementRightFoot()+":(1~5)\n"+
+                            "MuscleMass(RightFoot):"+tntMeasurementInformation.getMuscleMassRightFoot()+":(kg)\n"+
+                            "MuscleMassJudgement(RightFoot):"+tntMeasurementInformation.getMuscleMassJudgementRightFoot()+":(1~3)\n"+
+                            "MuscleMassScore(RightFoot):"+tntMeasurementInformation.getMuscleMassScoreRightFoot()+":(-4~4)\n"+
+                            "MuscleQuality(RightFoot):"+tntMeasurementInformation.getMuscleQualityRightFoot()+":(0~100)\n"+
+                            "MuscleQualityJudgement(RightFoot):"+tntMeasurementInformation.getMuscleQualityJudgementRightFoot()+"(1~9)\n"+
 
-                            "Basal Metabolic Rate:"+tntMeasurementInformation.getBasalMetabolicRate()+"(kcal)\n"+
-                            "Basal Metabolic Rate Judgement:"+tntMeasurementInformation.getBasalMetabolicRateJudgement()+"(1~16)\n"+
+                            "ImpedanceArms50kHzR:"+tntMeasurementInformation.getImpedanceArms50kHzR()+":(Ω)\n"+
+                            "ImpedanceArms50kHzX:"+tntMeasurementInformation.getImpedanceArms50kHzX()+":(Ω)\n"+
+                            "ImpedanceArms6.25kHzR:"+tntMeasurementInformation.getImpedanceArms6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceArms6.25kHzX:"+tntMeasurementInformation.getImpedanceArms6_25kHzX()+":(Ω)\n"+
 
-                            "Get the Daily Caloric Intake:"+tntMeasurementInformation.getDailyCaloricIntake()+"(kcal)\n"+
-                            "Ep Pulse:"+tntMeasurementInformation.getEpPulse()+"(50-200)");
+                            "ImpedanceLeftArm50kHzR:"+tntMeasurementInformation.getImpedanceLeftArm50kHzR()+":(Ω)\n"+
+                            "ImpedanceLeftArm50kHzX:"+tntMeasurementInformation.getImpedanceLeftArm50kHzX()+":(Ω)\n"+
+                            "ImpedanceLeftArm6.25kHzR:"+tntMeasurementInformation.getImpedanceLeftArm6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceLeftArm6.25kHzX:"+tntMeasurementInformation.getImpedanceLeftArm6_25kHzX()+":(Ω)\n"+
+
+                            "ImpedanceRightArm50kHzR:"+tntMeasurementInformation.getImpedanceRightArm50kHzR()+":(Ω)\n"+
+                            "ImpedanceRightArm50kHzX:"+tntMeasurementInformation.getImpedanceRightArm50kHzX()+":(Ω)\n"+
+                            "ImpedanceRightArm6.25kHzR:"+tntMeasurementInformation.getImpedanceRightArm6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceRightArm6.25kHzX:"+tntMeasurementInformation.getImpedanceRightArm6_25kHzX()+":(Ω)\n"+
+
+                            "ImpedanceFoot50kHzR:"+tntMeasurementInformation.getImpedanceFoot50kHzR()+":(Ω)\n"+
+                            "ImpedanceFoot50kHzX:"+tntMeasurementInformation.getImpedanceFoot50kHzX()+":(Ω)\n"+
+                            "ImpedanceFoot6.25kHzR:"+tntMeasurementInformation.getImpedanceFoot6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceFoot6.25kHzX:"+tntMeasurementInformation.getImpedanceFoot6_25kHzX()+":(Ω)\n"+
+
+                            "ImpedanceLeftFoot50kHzR:"+tntMeasurementInformation.getImpedanceLeftFoot50kHzR()+":(Ω)\n"+
+                            "ImpedanceLeftFoot50kHzX:"+tntMeasurementInformation.getImpedanceLeftFoot50kHzX()+":(Ω)\n"+
+                            "ImpedanceLeftFoot6.25kHzR:"+tntMeasurementInformation.getImpedanceLeftFoot6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceLeftFoot6.25kHzX:"+tntMeasurementInformation.getImpedanceLeftFoot6_25kHzX()+":(Ω)\n"+
+
+                            "ImpedanceRightFoot50kHzR:"+tntMeasurementInformation.getImpedanceRightFoot50kHzR()+":(Ω)\n"+
+                            "ImpedanceRightFoot50kHzX:"+tntMeasurementInformation.getImpedanceRightFoot50kHzX()+":(Ω)\n"+
+                            "ImpedanceRightFoot6.25kHzR:"+tntMeasurementInformation.getImpedanceRightFoot6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceRightFoot6.25kHzX:"+tntMeasurementInformation.getImpedanceRightFoot6_25kHzX()+":(Ω)\n"+
+
+                            "ImpedanceLeftBody50kHzR:"+tntMeasurementInformation.getImpedanceLeftBody50kHzR()+":(Ω)\n"+
+                            "ImpedanceLeftBody50kHzX:"+tntMeasurementInformation.getImpedanceLeftBody50kHzX()+":(Ω)\n"+
+                            "ImpedanceLeftBody6.25kHzR:"+tntMeasurementInformation.getImpedanceLeftBody6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceLeftBody6.25kHzX:"+tntMeasurementInformation.getImpedanceLeftBody6_25kHzX()+":(Ω)\n"+
+
+                            "ImpedanceRightBody50kHzR:"+tntMeasurementInformation.getImpedanceRightBody50kHzR()+":(Ω)\n"+
+                            "ImpedanceRightBody50kHzX:"+tntMeasurementInformation.getImpedanceRightBody50kHzX()+":(Ω)\n"+
+                            "ImpedanceRightBody6.25kHzR:"+tntMeasurementInformation.getImpedanceRightBody6_25kHzR()+":(Ω)\n"+
+                            "ImpedanceRightBody6.25kHzX:"+tntMeasurementInformation.getImpedanceRightBody6_25kHzX()+":(Ω)\n"
+                    );
+                    _TNTBLEPeripheral.disconnect();
+                    _TNTBLEManager.destroy();
                 }
-                //_TNTBLEPeripheral.disconnect();
             }
 
             @Override
@@ -337,11 +439,145 @@ public class MeasurementActivity extends AppCompatActivity {
     }
     public void TestStartEvent()
     {
-        Log.i("wiki1","執行量測...");
+        Log.i("wiki1","Measurement Open...");
         //Toast.makeText(this, "執行量測...", Toast.LENGTH_LONG).show();
         UserText.setText(UserText.getText()+"\nMeasurement Start...");
         _TNTBLEPeripheral.startMeasurement();
         //Log.i("wiki1","詢問設備登入編號1之使用者別名(TNTUserInformation.getNickname):"+_TNTUserInformation.getNickname());
+    }
+    public void UpdateCloudServerEvent(View v)
+    {
+        String[] parts = UserText.getText().toString().split("\n");
+        if(parts.length>80)
+        {
+            Toast.makeText(this, "上傳中...", Toast.LENGTH_LONG).show();
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            try {
+                JSONObject PostData = new JSONObject();
+                PostData.put("TestTime", _TNTUserInformation.getDate());
+                PostData.put("MachineNumber", "ST0001");
+                PostData.put("UserName", UserName); //if have,this user's phone.
+                PostData.put("Birthday", _TNTUserInformation.getGender());
+                PostData.put("Height", _TNTUserInformation.getHeight());
+                PostData.put("Gender", _TNTUserInformation.getGender());
+                PostData.put("weight", _TNTMeasurementInformation.getWeight());
+                PostData.put("ActivityLevel", _TNTMeasurementInformation.getActivityLevel());
+                PostData.put("MuscleQuality", _TNTMeasurementInformation.getMuscleQuality());
+                PostData.put("AthleteIndex", _TNTMeasurementInformation.getAthleteIndex());
+                PostData.put("MBA", _TNTMeasurementInformation.getMetabolicAge());
+                PostData.put("BasalMetabolicRate", _TNTMeasurementInformation.getBasalMetabolicRate());
+                PostData.put("BasalMetabolicRateJudgement", _TNTMeasurementInformation.getBasalMetabolicRateJudgement());
+                PostData.put("VisceralFat", _TNTMeasurementInformation.getVisceralFat());
+                PostData.put("VisceralFatJudgement", _TNTMeasurementInformation.getVisceralFatJudgement());
+                PostData.put("MetabolicAge", _TNTMeasurementInformation.getMetabolicAge());
+                PostData.put("RestingMetabolismArray", _TNTMeasurementInformation.getRestingMetabolismArray());
+                PostData.put("BoneMass", _TNTMeasurementInformation.getBoneMass());
+                PostData.put("BoneMassJudgement", _TNTMeasurementInformation.getBoneMassJudgement());
+                PostData.put("BodyWater", _TNTMeasurementInformation.getBodyWater());
+                PostData.put("BMI", _TNTMeasurementInformation.getBodyMassIndex());
+                PostData.put("BmiJudgement", _TNTMeasurementInformation.getBodyMassIndexJudgement());
+                PostData.put("EpPulse", _TNTMeasurementInformation.getEpPulse());
+                PostData.put("BodyFat", _TNTMeasurementInformation.getBodyFat());
+                PostData.put("BodyFatJudgement", _TNTMeasurementInformation.getBodyFatJudgement());
+                PostData.put("MuscleMass", _TNTMeasurementInformation.getMuscleMass());
+                PostData.put("MuscleMassJudgement", _TNTMeasurementInformation.getMuscleMassJudgement());
+                PostData.put("MuscleMassScore", _TNTMeasurementInformation.getMuscleMassScore());
+                PostData.put("MuscleQuality", _TNTMeasurementInformation.getMuscleQuality());
+                PostData.put("MuscleQualityJudgement", _TNTMeasurementInformation.getMuscleQualityJudgement());
+                PostData.put("BodyFatTrunk", _TNTMeasurementInformation.getBodyFatTrunk());
+                PostData.put("BodyFatJudgementTrunk", _TNTMeasurementInformation.getBodyFatJudgementTrunk());
+                PostData.put("MuscleMassTrunk", _TNTMeasurementInformation.getMuscleMassTrunk());
+                PostData.put("MuscleMassJudgementTrunk", _TNTMeasurementInformation.getMuscleMassJudgementTrunk());
+                PostData.put("MuscleMassScoreTrunk", _TNTMeasurementInformation.getMuscleMassScoreTrunk());
+                PostData.put("BodyFatLeftArm", _TNTMeasurementInformation.getBodyFatLeftArm());
+                PostData.put("BodyFatJudgementLeftArm", _TNTMeasurementInformation.getBodyFatJudgementLeftArm());
+                PostData.put("MuscleMassLeftArm", _TNTMeasurementInformation.getMuscleMassLeftArm());
+                PostData.put("MuscleMassJudgementLeftArm", _TNTMeasurementInformation.getMuscleMassJudgementLeftArm());
+                PostData.put("MuscleMassScoreLeftArm", _TNTMeasurementInformation.getMuscleMassScoreLeftArm());
+                PostData.put("MuscleQualityLeftArm", _TNTMeasurementInformation.getMuscleQualityLeftArm());
+                PostData.put("MuscleQualityJudgementLeftArm", _TNTMeasurementInformation.getMuscleQualityJudgementLeftArm());
+                PostData.put("BodyFatRightArm", _TNTMeasurementInformation.getBodyFatRightArm());
+                PostData.put("BodyFatJudgementRightArm", _TNTMeasurementInformation.getBodyFatJudgementRightArm());
+                PostData.put("MuscleMassRightArm", _TNTMeasurementInformation.getMuscleMassRightArm());
+                PostData.put("MuscleMassJudgementRightArm", _TNTMeasurementInformation.getMuscleMassJudgementRightArm());
+                PostData.put("MuscleMassScoreRightArm", _TNTMeasurementInformation.getMuscleMassScoreRightArm());
+                PostData.put("MuscleQualityRightArm", _TNTMeasurementInformation.getMuscleQualityRightArm());
+                PostData.put("MuscleQualityJudgementRightArm", _TNTMeasurementInformation.getMuscleQualityJudgementRightArm());
+                PostData.put("BodyFatLeftFoot", _TNTMeasurementInformation.getBodyFatLeftFoot());
+                PostData.put("BodyFatJudgementLeftFoot", _TNTMeasurementInformation.getBodyFatJudgementLeftFoot());
+                PostData.put("MuscleMassLeftFoot", _TNTMeasurementInformation.getMuscleMassLeftFoot());
+                PostData.put("MuscleMassJudgementLeftFoot", _TNTMeasurementInformation.getMuscleMassJudgementLeftFoot());
+                PostData.put("MuscleMassScoreLeftFoot", _TNTMeasurementInformation.getMuscleMassScoreLeftFoot());
+                PostData.put("MuscleQualityLeftFoot", _TNTMeasurementInformation.getMuscleQualityLeftFoot());
+                PostData.put("MuscleQualityJudgementLeftFoot", _TNTMeasurementInformation.getMuscleQualityJudgementLeftFoot());
+                PostData.put("BodyFatRightFoot", _TNTMeasurementInformation.getBodyFatRightFoot());
+                PostData.put("BodyFatJudgementRightFoot", _TNTMeasurementInformation.getBodyFatJudgementRightFoot());
+                PostData.put("MuscleMassRightFoot", _TNTMeasurementInformation.getMuscleMassRightFoot());
+                PostData.put("MuscleMassJudgementRightFoot", _TNTMeasurementInformation.getMuscleMassJudgementRightFoot());
+                PostData.put("MuscleMassScoreRightFoot", _TNTMeasurementInformation.getMuscleMassScoreRightFoot());
+                PostData.put("MuscleQualityRightFoot", _TNTMeasurementInformation.getMuscleQualityRightFoot());
+                PostData.put("MuscleQualityJudgementRightFoot", _TNTMeasurementInformation.getMuscleQualityJudgementRightFoot());
+                PostData.put("ImpedanceArms50kHzX", _TNTMeasurementInformation.getImpedanceArms50kHzX());
+                PostData.put("ImpedanceArms6_25kHzR", _TNTMeasurementInformation.getImpedanceArms6_25kHzR());
+                PostData.put("ImpedanceArms6_25kHzX", _TNTMeasurementInformation.getImpedanceArms6_25kHzX());
+                PostData.put("ImpedanceLeftArm50kHzR", _TNTMeasurementInformation.getImpedanceLeftArm50kHzR());
+                PostData.put("ImpedanceLeftArm50kHzX", _TNTMeasurementInformation.getImpedanceLeftArm50kHzX());
+                PostData.put("ImpedanceLeftArm6_25kHzR", _TNTMeasurementInformation.getImpedanceLeftArm6_25kHzR());
+                PostData.put("ImpedanceLeftArm6_25kHzX", _TNTMeasurementInformation.getImpedanceLeftArm6_25kHzX());
+                PostData.put("ImpedanceRightArm50kHzR", _TNTMeasurementInformation.getImpedanceRightArm50kHzR());
+                PostData.put("ImpedanceRightArm50kHzX", _TNTMeasurementInformation.getImpedanceRightArm50kHzX());
+                PostData.put("ImpedanceRightArm6_25kHzR", _TNTMeasurementInformation.getImpedanceRightArm6_25kHzR());
+                PostData.put("ImpedanceRightArm6_25kHzX", _TNTMeasurementInformation.getImpedanceRightArm6_25kHzX());
+                PostData.put("ImpedanceFoot50kHzR", _TNTMeasurementInformation.getImpedanceFoot50kHzR());
+                PostData.put("ImpedanceFoot50kHzX", _TNTMeasurementInformation.getImpedanceFoot50kHzX());
+                PostData.put("ImpedanceFoot6_25kHzR", _TNTMeasurementInformation.getImpedanceFoot6_25kHzR());
+                PostData.put("ImpedanceFoot6_25kHzX", _TNTMeasurementInformation.getImpedanceFoot6_25kHzX());
+                PostData.put("ImpedanceLeftFoot50kHzR", _TNTMeasurementInformation.getImpedanceLeftFoot50kHzR());
+                PostData.put("ImpedanceLeftFoot50kHzX", _TNTMeasurementInformation.getImpedanceLeftFoot50kHzX());
+                PostData.put("ImpedanceLeftFoot6_25kHzR", _TNTMeasurementInformation.getImpedanceLeftFoot6_25kHzR());
+                PostData.put("ImpedanceLeftFoot6_25kHzX", _TNTMeasurementInformation.getImpedanceLeftFoot6_25kHzX());
+                PostData.put("ImpedanceRightFoot50kHzR", _TNTMeasurementInformation.getImpedanceRightFoot50kHzR());
+                PostData.put("ImpedanceRightFoot50kHzX", _TNTMeasurementInformation.getImpedanceRightFoot50kHzX());
+                PostData.put("ImpedanceRightFoot6_25kHzR", _TNTMeasurementInformation.getImpedanceRightFoot6_25kHzR());
+                PostData.put("ImpedanceRightFoot6_25kHzX", _TNTMeasurementInformation.getImpedanceRightFoot6_25kHzX());
+                PostData.put("ImpedanceLeftBody50kHzR", _TNTMeasurementInformation.getImpedanceLeftBody50kHzR());
+                PostData.put("ImpedanceLeftBody50kHzX", _TNTMeasurementInformation.getImpedanceLeftBody50kHzX());
+                PostData.put("ImpedanceLeftBody6_25kHzR", _TNTMeasurementInformation.getImpedanceLeftBody6_25kHzR());
+                PostData.put("ImpedanceLeftBody6_25kHzX", _TNTMeasurementInformation.getImpedanceLeftBody6_25kHzX());
+                PostData.put("ImpedanceRightBody50kHzR", _TNTMeasurementInformation.getImpedanceRightBody50kHzR());
+                PostData.put("ImpedanceRightBody50kHzX", _TNTMeasurementInformation.getImpedanceRightBody50kHzX());
+                PostData.put("ImpedanceRightBody6_25kHzR", _TNTMeasurementInformation.getImpedanceRightBody6_25kHzR());
+                PostData.put("ImpedanceRightBody6_25kHzX", _TNTMeasurementInformation.getImpedanceRightBody6_25kHzX());
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                        Request.Method.POST,
+                        SERVER_URL,
+                        PostData,
+                        response -> {
+                            try {
+                                Toast.makeText(this, response.getString("message"), Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                                Toast.makeText(this, "error: message null.", Toast.LENGTH_SHORT).show();
+                            }
+                        },
+                        error -> Toast.makeText(this, "update error!!!", Toast.LENGTH_LONG).show()
+                );
+
+                queue.add(jsonObjectRequest);
+
+            } catch (Exception e) {
+                Toast.makeText(this, "error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            UserText.setText(UserText.getText()+"\nUpdata Over...");
+            UpdateCloudButton.setVisibility(View.GONE);
+            //finish();
+        }
+        else
+        {
+            Toast.makeText(this, "資料不足無法上傳", Toast.LENGTH_LONG).show();
+        }
     }
     private static String[] PERMISSIONS_STORAGE = {
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -434,7 +670,6 @@ public class MeasurementActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        _TNTBLEPeripheral.disconnect();
     }
-
 }

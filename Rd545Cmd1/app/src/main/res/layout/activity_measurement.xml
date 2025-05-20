@@ -5,53 +5,66 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="visible"
     tools:context=".MeasurementActivity">
 
     <Button
         android:id="@+id/SetDataButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="User0MsgSet"
-        android:text="Set Data"
+        android:onClick="User0MsgSetForFirstLink"
+        android:text="Message"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SaveUUIDButton" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/SaveRomButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="User0MsgSetForFirstLink"
         android:text="Save Rom"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/UserText" />
+        app:layout_constraintTop_toBottomOf="@+id/SetDataButton" />
 
     <Button
         android:id="@+id/SaveUUIDButton"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="User0MsgGet"
         android:text="First Link Get User0"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/SaveRomButton" />
 
-    <TextView
-        android:id="@+id/UserText"
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:text="Message"
-        android:textSize="20sp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SetDataButton" />
+        app:layout_constraintTop_toBottomOf="@+id/SaveUUIDButton">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/UserText"
+                android:layout_width="match_parent"
+                android:layout_height="2000dp"
+                android:text="Message"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/UpdateCloudButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="UpdateCloudServerEvent"
+                android:text="Update Cloud Server"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

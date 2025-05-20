@@ -1,5 +1,6 @@
 package wi.ki.qrtest1;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -152,5 +153,22 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MeasurementActivity.class);
         intent.putExtra("key", textView.getText());
         startActivity(intent);
+
+        /*
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(
+                "wi.ki.rd545cmd1", // APP2 的 package name
+                "wi.ki.rd545cmd1.MeasurementActivity" // APP2 的完整 Activity 名稱
+        ));
+        String[] parts = textView.getText().toString().split("\\|");
+        intent.putExtra("Phone",parts[0]);
+        intent.putExtra("Area",parts[1]);
+        intent.putExtra("Gender",parts[2]);
+        intent.putExtra("Birthday",parts[3]);
+        intent.putExtra("Height",parts[4]);
+        intent.putExtra("Weight",parts[5]);
+        intent.putExtra("ClothesWeight",parts[6]);
+        startActivity(intent);
+        */
     }
 }
