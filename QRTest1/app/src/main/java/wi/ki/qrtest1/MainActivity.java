@@ -150,15 +150,15 @@ public class MainActivity extends AppCompatActivity {
     }
     public void BtnClick(View v)
     {
+
         Intent intent = new Intent(this, MeasurementActivity.class);
         intent.putExtra("key", textView.getText());
         startActivity(intent);
-
         /*
         Intent intent = new Intent();
         intent.setComponent(new ComponentName(
-                "wi.ki.rd545cmd1", // APP2 的 package name
-                "wi.ki.rd545cmd1.MeasurementActivity" // APP2 的完整 Activity 名稱
+                "wi.ki.rd545cmd1", // package name of APP2
+                "wi.ki.rd545cmd1.MeasurementActivity" // call to Activity2 Name of APP2
         ));
         String[] parts = textView.getText().toString().split("\\|");
         intent.putExtra("Phone",parts[0]);
