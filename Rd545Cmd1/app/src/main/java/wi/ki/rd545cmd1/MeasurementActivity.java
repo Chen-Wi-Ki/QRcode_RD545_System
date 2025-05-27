@@ -139,6 +139,7 @@ public class MeasurementActivity extends AppCompatActivity {
                 Log.i("wiki1","onTNTBLEPeripheralConnectionIgnored runned...");
             }
         };
+
         _TNTBLEPeripheralListener =new TNTBLEPeripheral.TNTBLEPeripheralListener() {
             @Override
             public void onDisconnectionRequested(TNTBLEPeripheral tntblePeripheral, int i, int i1) {
@@ -329,6 +330,7 @@ public class MeasurementActivity extends AppCompatActivity {
         };
 
         CheckPermissions();//BLE Permissions
+
         LinkDevice();
 
     }
@@ -701,7 +703,7 @@ public class MeasurementActivity extends AppCompatActivity {
             android.Manifest.permission.BLUETOOTH_CONNECT,
             android.Manifest.permission.BLUETOOTH_PRIVILEGED
     };
-    private void CheckPermissions(){//程式內需設計請求使用者進行藍芽權限開啟,Android8.0以後的要求
+    private void CheckPermissions(){
         int permission1 = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permission2 = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN);
         if (permission1 != PackageManager.PERMISSION_GRANTED) {
