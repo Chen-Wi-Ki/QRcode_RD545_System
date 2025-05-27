@@ -72,6 +72,14 @@
                 android:text="Save *.csv"
                 android:textSize="20sp" />
 
+            <Button
+                android:id="@+id/UiOutputButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="EasyModeShowEvent"
+                android:text="Easy Mode Show"
+                android:textSize="20sp" />
+
         </LinearLayout>
     </ScrollView>
 

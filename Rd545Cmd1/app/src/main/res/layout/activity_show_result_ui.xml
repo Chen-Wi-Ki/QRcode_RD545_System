@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ShowResultUiActivity">
+    <FrameLayout
+        android:id="@+id/frame_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F5F5F5">
+
+        <ImageView
+            android:id="@+id/body_silhouette"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:adjustViewBounds="true"
+            android:src="@drawable/male1" />
+
+        <TextView
+            android:id="@+id/Weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="2dp"
+            android:padding="10dp"
+            android:text="Weight\n50.0 kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/Height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="50dp"
+            android:padding="10dp"
+            android:text="Height\n180cm"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BMI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="100dp"
+            android:padding="10dp"
+            android:text="BMI\n25"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/MuscleMass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="150dp"
+            android:padding="10dp"
+            android:text="Body muscle\n50.0 kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/EpPulse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="200dp"
+            android:padding="10dp"
+            android:text="Ep pulse\n100"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BoneMass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="250dp"
+            android:padding="10dp"
+            android:text="Bone mass\n6kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BodyWater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="300dp"
+            android:padding="10dp"
+            android:text="BodyWater\n50%"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BodyFat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="350dp"
+            android:padding="10dp"
+            android:text="BodyFat\n50%"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/VisceralFat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="400dp"
+            android:padding="10dp"
+            android:text="Visceral fat\n50"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BasalMetabolicRate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top|end"
+            android:layout_marginTop="450dp"
+            android:padding="10dp"
+            android:text="MetabolicRate\n2000"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/MuscleMassTrunk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="190dp"
+            android:layout_marginEnd="123dp"
+            android:padding="10dp"
+            android:text="Trunk\nmuscle\n25.0 kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/BodyFatTrunk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="250dp"
+            android:layout_marginEnd="127dp"
+            android:padding="10dp"
+            android:text="Trunk\nfit rate\n25.0 %"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/MuscleMassRightArm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="180dp"
+            android:layout_marginEnd="5dp"
+            android:padding="10dp"
+            android:text="Right arm\nmuscle\n2.4 kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BodyFatRightArm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="240dp"
+            android:layout_marginEnd="5dp"
+            android:padding="10dp"
+            android:text="Right arm\nfat rate\n20%"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/MuscleMassLeftFoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="450dp"
+            android:layout_marginEnd="200dp"
+            android:padding="10dp"
+            android:text="Left limb\nmuscle\n7.0 kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BodyFatLeftFoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="510dp"
+            android:layout_marginEnd="200dp"
+            android:padding="10dp"
+            android:text="Left limb\nfat rate\n7.0 %"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/MuscleMassLeftArm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="180dp"
+            android:layout_marginEnd="215dp"
+            android:padding="10dp"
+            android:text="Left arm\nmuscle\n2.3 kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BodyFatLeftArm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="240dp"
+            android:layout_marginEnd="215dp"
+            android:padding="10dp"
+            android:text="Left arm\nfat rate\n20%"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/MuscleMassRightFoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="450dp"
+            android:layout_marginEnd="30dp"
+            android:padding="10dp"
+            android:text="Right limb\nmuscle\n7.1 kg"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/BodyFatRightFoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="510dp"
+            android:layout_marginEnd="30dp"
+            android:padding="10dp"
+            android:text="Right limb\nfat rate\n7.1 %"
+            android:textColor="#FF0000"
+            android:textSize="14sp" />
+
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

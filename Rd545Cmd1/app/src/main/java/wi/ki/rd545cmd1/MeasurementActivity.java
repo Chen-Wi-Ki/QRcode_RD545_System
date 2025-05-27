@@ -457,11 +457,11 @@ public class MeasurementActivity extends AppCompatActivity {
                 JSONObject PostData = new JSONObject();
                 PostData.put("TestTime"                         , _TNTUserInformation.getDate());
                 PostData.put("MachineNumber"                    , "ST0001");
-                PostData.put("UserName"                         , UserName); //if have,this user's phone.
-                PostData.put("Birthday"                         , _TNTUserInformation.getGender());
-                PostData.put("Height"                           , _TNTUserInformation.getHeight());
-                PostData.put("Gender"                           , _TNTUserInformation.getGender());
-                PostData.put("weight"                           , _TNTMeasurementInformation.getWeight());
+                PostData.put("UserName"                         , UserName);
+                PostData.put("Birthday"                         , Birthday);
+                PostData.put("Height"                           , Height);
+                PostData.put("Gender"                           , Gender);
+                PostData.put("Weight"                           , _TNTMeasurementInformation.getWeight());
                 PostData.put("ActivityLevel"                    , _TNTMeasurementInformation.getActivityLevel());
                 PostData.put("MuscleQuality"                    , _TNTMeasurementInformation.getMuscleQuality());
                 PostData.put("AthleteIndex"                     , _TNTMeasurementInformation.getAthleteIndex());
@@ -602,6 +602,81 @@ public class MeasurementActivity extends AppCompatActivity {
                 e.printStackTrace();
                 Log.i("wiki1", "CSV Output Error:" + e.getMessage());
             }
+        }
+        else
+        {
+            Toast.makeText(this, "資料不足無法建檔", Toast.LENGTH_LONG).show();
+        }
+    }
+    public void EasyModeShowEvent(View v)
+    {
+        String[] parts = UserText.getText().toString().split("\n");
+        if(parts.length>80) {
+            Intent intent = new Intent(this,ShowResultUiActivity.class);
+            intent.putExtra("TestTime"                         , _TNTUserInformation.getDate());
+            intent.putExtra("MachineNumber"                    , "ST0001");
+            intent.putExtra("UserName"                         , UserName); //if have,this user's phone.
+            intent.putExtra("Birthday"                         , Birthday);
+            intent.putExtra("Height"                           , Height);
+            intent.putExtra("Gender"                           , Gender);
+            intent.putExtra("Weight"                           , _TNTMeasurementInformation.getWeight());
+            intent.putExtra("ActivityLevel"                    , _TNTMeasurementInformation.getActivityLevel());
+            intent.putExtra("MuscleQuality"                    , _TNTMeasurementInformation.getMuscleQuality());
+            intent.putExtra("AthleteIndex"                     , _TNTMeasurementInformation.getAthleteIndex());
+            intent.putExtra("MBA"                              , _TNTMeasurementInformation.getMetabolicAge());
+            intent.putExtra("BasalMetabolicRate"               , _TNTMeasurementInformation.getBasalMetabolicRate());
+            intent.putExtra("BasalMetabolicRateJudgement"      , _TNTMeasurementInformation.getBasalMetabolicRateJudgement());
+            intent.putExtra("VisceralFat"                      , _TNTMeasurementInformation.getVisceralFat());
+            intent.putExtra("VisceralFatJudgement"             , _TNTMeasurementInformation.getVisceralFatJudgement());
+            intent.putExtra("MetabolicAge"                     , _TNTMeasurementInformation.getMetabolicAge());
+            intent.putExtra("BoneMass"                         , _TNTMeasurementInformation.getBoneMass());
+            intent.putExtra("BoneMassJudgement"                , _TNTMeasurementInformation.getBoneMassJudgement());
+            intent.putExtra("BodyWater"                        , _TNTMeasurementInformation.getBodyWater());
+            intent.putExtra("BMI"                              , _TNTMeasurementInformation.getBodyMassIndex());
+            intent.putExtra("BmiJudgement"                     , _TNTMeasurementInformation.getBodyMassIndexJudgement());
+            intent.putExtra("EpPulse"                          , _TNTMeasurementInformation.getEpPulse());
+            intent.putExtra("BodyFat"                          , _TNTMeasurementInformation.getBodyFat());
+            intent.putExtra("BodyFatJudgement"                 , _TNTMeasurementInformation.getBodyFatJudgement());
+            intent.putExtra("MuscleMass"                       , _TNTMeasurementInformation.getMuscleMass());
+            intent.putExtra("MuscleMassJudgement"              , _TNTMeasurementInformation.getMuscleMassJudgement());
+            intent.putExtra("MuscleMassScore"                  , _TNTMeasurementInformation.getMuscleMassScore());
+            intent.putExtra("MuscleQuality"                    , _TNTMeasurementInformation.getMuscleQuality());
+            intent.putExtra("MuscleQualityJudgement"           , _TNTMeasurementInformation.getMuscleQualityJudgement());
+            intent.putExtra("BodyFatTrunk"                     , _TNTMeasurementInformation.getBodyFatTrunk());
+            intent.putExtra("BodyFatJudgementTrunk"            , _TNTMeasurementInformation.getBodyFatJudgementTrunk());
+            intent.putExtra("MuscleMassTrunk"                  , _TNTMeasurementInformation.getMuscleMassTrunk());
+            intent.putExtra("MuscleMassJudgementTrunk"         , _TNTMeasurementInformation.getMuscleMassJudgementTrunk());
+            intent.putExtra("MuscleMassScoreTrunk"             , _TNTMeasurementInformation.getMuscleMassScoreTrunk());
+            intent.putExtra("BodyFatLeftArm"                   , _TNTMeasurementInformation.getBodyFatLeftArm());
+            intent.putExtra("BodyFatJudgementLeftArm"          , _TNTMeasurementInformation.getBodyFatJudgementLeftArm());
+            intent.putExtra("MuscleMassLeftArm"                , _TNTMeasurementInformation.getMuscleMassLeftArm());
+            intent.putExtra("MuscleMassJudgementLeftArm"       , _TNTMeasurementInformation.getMuscleMassJudgementLeftArm());
+            intent.putExtra("MuscleMassScoreLeftArm"           , _TNTMeasurementInformation.getMuscleMassScoreLeftArm());
+            intent.putExtra("MuscleQualityLeftArm"             , _TNTMeasurementInformation.getMuscleQualityLeftArm());
+            intent.putExtra("MuscleQualityJudgementLeftArm"    , _TNTMeasurementInformation.getMuscleQualityJudgementLeftArm());
+            intent.putExtra("BodyFatRightArm"                  , _TNTMeasurementInformation.getBodyFatRightArm());
+            intent.putExtra("BodyFatJudgementRightArm"         , _TNTMeasurementInformation.getBodyFatJudgementRightArm());
+            intent.putExtra("MuscleMassRightArm"               , _TNTMeasurementInformation.getMuscleMassRightArm());
+            intent.putExtra("MuscleMassJudgementRightArm"      , _TNTMeasurementInformation.getMuscleMassJudgementRightArm());
+            intent.putExtra("MuscleMassScoreRightArm"          , _TNTMeasurementInformation.getMuscleMassScoreRightArm());
+            intent.putExtra("MuscleQualityRightArm"            , _TNTMeasurementInformation.getMuscleQualityRightArm());
+            intent.putExtra("MuscleQualityJudgementRightArm"   , _TNTMeasurementInformation.getMuscleQualityJudgementRightArm());
+            intent.putExtra("BodyFatLeftFoot"                  , _TNTMeasurementInformation.getBodyFatLeftFoot());
+            intent.putExtra("BodyFatJudgementLeftFoot"         , _TNTMeasurementInformation.getBodyFatJudgementLeftFoot());
+            intent.putExtra("MuscleMassLeftFoot"               , _TNTMeasurementInformation.getMuscleMassLeftFoot());
+            intent.putExtra("MuscleMassJudgementLeftFoot"      , _TNTMeasurementInformation.getMuscleMassJudgementLeftFoot());
+            intent.putExtra("MuscleMassScoreLeftFoot"          , _TNTMeasurementInformation.getMuscleMassScoreLeftFoot());
+            intent.putExtra("MuscleQualityLeftFoot"            , _TNTMeasurementInformation.getMuscleQualityLeftFoot());
+            intent.putExtra("MuscleQualityJudgementLeftFoot"   , _TNTMeasurementInformation.getMuscleQualityJudgementLeftFoot());
+            intent.putExtra("BodyFatRightFoot"                 , _TNTMeasurementInformation.getBodyFatRightFoot());
+            intent.putExtra("BodyFatJudgementRightFoot"        , _TNTMeasurementInformation.getBodyFatJudgementRightFoot());
+            intent.putExtra("MuscleMassRightFoot"              , _TNTMeasurementInformation.getMuscleMassRightFoot());
+            intent.putExtra("MuscleMassJudgementRightFoot"     , _TNTMeasurementInformation.getMuscleMassJudgementRightFoot());
+            intent.putExtra("MuscleMassScoreRightFoot"         , _TNTMeasurementInformation.getMuscleMassScoreRightFoot());
+            intent.putExtra("MuscleQualityRightFoot"           , _TNTMeasurementInformation.getMuscleQualityRightFoot());
+            intent.putExtra("MuscleQualityJudgementRightFoot"  , _TNTMeasurementInformation.getMuscleQualityJudgementRightFoot());
+            startActivity(intent);
+            finish();
         }
         else
         {
