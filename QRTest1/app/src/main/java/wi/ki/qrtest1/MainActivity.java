@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
         });
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
                 //.setRequestedPreviewSize(300, 300) // You can customize the preview window content size
+                //.setFacing(CameraSource.CAMERA_FACING_FRONT) // You can use front camera.
                 .setAutoFocusEnabled(true) // Autofocus
                 .build();
 

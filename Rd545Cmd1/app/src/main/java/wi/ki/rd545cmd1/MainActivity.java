@@ -92,12 +92,12 @@ public class MainActivity extends AppCompatActivity {
         if(checkedId==R.id.FemaleRadio)
         {
             Toast.makeText(this, "OK, Lady!", Toast.LENGTH_SHORT).show();
-            gender=0;
+            gender=1;
         }
         else
         {
             Toast.makeText(this, "OK, Gentleman!", Toast.LENGTH_SHORT).show();
-            gender=1;
+            gender=0;
         }
 
         if(CheckData)

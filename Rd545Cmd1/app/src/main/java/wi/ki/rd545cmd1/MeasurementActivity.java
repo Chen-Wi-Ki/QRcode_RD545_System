@@ -678,7 +678,7 @@ public class MeasurementActivity extends AppCompatActivity {
             intent.putExtra("MuscleQualityRightFoot"           , _TNTMeasurementInformation.getMuscleQualityRightFoot());
             intent.putExtra("MuscleQualityJudgementRightFoot"  , _TNTMeasurementInformation.getMuscleQualityJudgementRightFoot());
             startActivity(intent);
-            finish();
+            //finish();
         }
         else
         {
