@@ -55,10 +55,8 @@ public class MeasurementActivity extends AppCompatActivity {
     TNTBLEPeripheral.TNTBLEPeripheralListener _TNTBLEPeripheralListener;
     TNTUserInformation _TNTUserInformation;
     TNTMeasurementInformation _TNTMeasurementInformation;
-
-    final String SERVER_URL = "http://wiciar.com/bmi/testdata";
-    //This test SERVER_URL,You should change your url.
-
+    final String SERVER_URL = "https://demo.isafe.i-ambition.com/api/v1/stust/physical-game/logs/body-composition";
+    //final String SERVER_URL = "http://wiciar.com/bmi/testdata";
     boolean NeedSaveUUID=true;
     private static final String FILE_NAME = "MAC1.txt";
     String MAC1 = "Null";

@@ -15,7 +15,7 @@
         android:gravity="center"
         android:text="NONE"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/button1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
@@ -36,11 +36,24 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="BtnClick"
-        android:text="TestButton"
+        android:onClick="BIABtnClick"
+        android:text="BIA Test"
+        android:textSize="30sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:onClick="GameBtnClick"
+        android:text="Game Test"
         android:textSize="30sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

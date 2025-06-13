@@ -3,6 +3,7 @@ package wi.ki.qrtest1;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         });
         cameraSource = new CameraSource.Builder(this, barcodeDetector)
                 //.setRequestedPreviewSize(300, 300) // You can customize the preview window content size
-                //.setFacing(CameraSource.CAMERA_FACING_FRONT) // You can use front camera.
+                .setFacing(CameraSource.CAMERA_FACING_FRONT) // You can use front camera.
                 .setAutoFocusEnabled(true) // Autofocus
                 .build();
 
@@ -149,19 +150,26 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-    public void BtnClick(View v)
+    public void BIABtnClick(View v)
     {
-
+        String[] parts = textView.getText().toString().split("\\|");
+        if (parts.length<=5)
+        {
+            Toast.makeText(this, "QR code 格式不正確!!!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+        /*
+        //Test intent pass
         Intent intent = new Intent(this, MeasurementActivity.class);
         intent.putExtra("key", textView.getText());
         startActivity(intent);
-        /*
+        */
         Intent intent = new Intent();
         intent.setComponent(new ComponentName(
                 "wi.ki.rd545cmd1", // package name of APP2
                 "wi.ki.rd545cmd1.MeasurementActivity" // call to Activity2 Name of APP2
         ));
-        String[] parts = textView.getText().toString().split("\\|");
         intent.putExtra("Phone",parts[0]);
         intent.putExtra("Area",parts[1]);
         intent.putExtra("Gender",parts[2]);
@@ -170,6 +178,28 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Weight",parts[5]);
         intent.putExtra("ClothesWeight",parts[6]);
         startActivity(intent);
-        */
+        }
+    }
+
+    public void GameBtnClick(View v)
+    {
+        String[] parts = textView.getText().toString().split("\\|");
+        if (parts.length<=5)
+        {
+            Toast.makeText(this, "QR code 格式不正確!!!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Intent intent = new Intent();
+            intent.setComponent(new ComponentName("stust.wiki.imu4g", "com.unity3d.player.UnityPlayerActivity"));
+            intent.putExtra("Phone",parts[0]);
+            intent.putExtra("Area",parts[1]);
+            intent.putExtra("Gender",parts[2]);
+            intent.putExtra("Birthday",parts[3]);
+            intent.putExtra("Height",parts[4]);
+            intent.putExtra("Weight",parts[5]);
+            intent.putExtra("ClothesWeight",parts[6]);
+            startActivity(intent);
+        }
     }
 }

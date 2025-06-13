@@ -58,15 +58,15 @@ public class ShowResultUiActivity extends AppCompatActivity {
         BodySilhouette          = findViewById(R.id.body_silhouette);
 
         Intent intent = getIntent();
-        Log.i("wiki1", "Gender=" + intent.getIntExtra("Gender",3));
         Log.i("wiki1", "Weight=" + intent.getStringExtra("Weight"));
         Log.i("wiki1", "Height=" + intent.getStringExtra("Height"));
+        Log.i("wiki1", "Gender=" + intent.getIntExtra("Gender",3));
 
         Gender              = intent.getIntExtra("Gender",3);
 
         if(Gender==1)
         {
-            BodySilhouette.setImageResource(R.drawable.female1);
+            BodySilhouette.setImageResource(R.drawable.male1);
         }
         else
         {
